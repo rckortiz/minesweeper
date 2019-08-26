@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+// import Cell from './components/cell'
 
 class Board extends Component {
   state = {
+    data: [],
     board: [],
     mines: 0,
     state: 'null',
+    col: '',
+    row: '',
     id: 0,
     difficulty: 0
   }
@@ -19,8 +23,12 @@ class Board extends Component {
   //   })
   // }
 
-  check = (x, y) => {
-    console.log(`clicked ${x}, ${y}`)
+  check = (row, col) => {
+    console.log(`clicked ${row}, ${col}`)
+    axios.post('https://minesweeper-api.herokuapp.com/games/games/{id}/check', {
+      row: row,
+      col: col
+    })
   }
 
   componentDidMount = async () => {
@@ -39,21 +47,26 @@ class Board extends Component {
     return (
       <>
         <h1>Welcome to Minesweeper</h1>
-        <button onClick={this.reset}>reset</button>
+        <button>reset</button>
         <main>
           <table>
             <tbody>
-              {this.state.board.map(row => {
+              {this.state.board.map((row, i) => {
                 return (
-                  <tr>
-                    {row.map(col => {
+                  <tr key={i}>
+                    {row.map((col, j) => {
                       return (
-                        <td>
-                          <button>{col}</button>
+                        <td key={j}>
+                          <button
+                            display={this.state.board[i][j]}
+                            onClick={() => this.check(i, j)}
+                            rightClick={() => this.flag(i, j)}
+                          >
+                            {col}
+                          </button>
                         </td>
                       )
                     })}
-                    <td />
                   </tr>
                 )
               })}
