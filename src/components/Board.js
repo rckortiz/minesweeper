@@ -60,7 +60,6 @@ class Board extends Component {
                           <button
                             display={this.state.board[i][j]}
                             onClick={() => this.check(i, j)}
-                            rightClick={() => this.flag(i, j)}
                           >
                             {col}
                           </button>
